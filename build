@@ -1,0 +1,19 @@
+#!/bin/bash
+
+set -euo pipefail
+
+echo "Clearing cache / recreating builder"
+docker buildx rm builder || echo "Builder not found"
+docker buildx create --name builder --use || echo "Builder probably already exists"
+
+REPO=jstotz/cache-test
+TAG=$(git rev-parse HEAD)
+CACHE_TAG="cache"
+
+docker buildx build \
+  --pull \
+  --push \
+  --cache-from "$REPO:$CACHE_TAG" \
+  --cache-to type=registry,ref="$REPO:$CACHE_TAG" \
+  -t "$REPO:$TAG" \
+  .

@@ -1,0 +1,12 @@
+#!/bin/bash
+
+set -euo pipefail
+
+echo "Creating test files"
+mkdir -p ./src/cache-test
+for i in {1..5}; do
+  for j in {1..5}; do
+    touch ./src/cache-test/build-$i-static-$j
+    touch ./src/cache-test/build-$i-test-$j
+  done
+done
